@@ -1,0 +1,27 @@
+{
+  "name": "detailed",
+  "description": "Detailed card design with more text space",
+  "cardWidth": 1080,
+  "cardHeight": 1350,
+  "backgroundColor": "#F8F9FA",
+  "textColor": "#1A1A1A",
+  "accentColor": "#FF6B6B",
+  "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI'",
+  "coverCard": {
+    "titleFontSize": 56,
+    "magazineNameFontSize": 28,
+    "magazineNameOpacity": 0.8,
+    "padding": 50
+  },
+  "contentCard": {
+    "textFontSize": 48,
+    "numberFontSize": 150,
+    "numberOpacity": 0.2,
+    "padding": 80
+  },
+  "endCard": {
+    "mainTextFontSize": 52,
+    "subtextFontSize": 32,
+    "magazineNameFontSize": 24
+  }
+}

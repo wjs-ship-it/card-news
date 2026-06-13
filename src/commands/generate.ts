@@ -9,7 +9,7 @@ import { validateUrl } from '../utils/path-validator.js';
 
 export async function generateNews(
   url: string,
-  options: { output: string; zip?: boolean }
+  options: { output: string; zip?: boolean; template?: string }
 ): Promise<void> {
   try {
     // Validate URL
@@ -32,8 +32,8 @@ export async function generateNews(
     logProcessing('AI 요약 생성 중...');
     const lines = await generateSummary(article, apiKey);
 
-    logProcessing('카드 생성 중...');
-    await generateCards(lines, config.magazineName, config.color, options.output);
+    logProcessing(`카드 생성 중... (template: ${options.template || 'minimal'})`);
+    await generateCards(lines, config.magazineName, config.color, options.output, options.template);
 
     console.log('\n');
     logSuccess(`카드는 ${options.output}에 저장되었습니다.`);

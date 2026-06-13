@@ -1,0 +1,27 @@
+{
+  "name": "minimal",
+  "description": "Clean and minimal card design",
+  "cardWidth": 1080,
+  "cardHeight": 1350,
+  "backgroundColor": "#FFFFFF",
+  "textColor": "#000000",
+  "accentColor": "#FF6B6B",
+  "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI'",
+  "coverCard": {
+    "titleFontSize": 48,
+    "magazineNameFontSize": 24,
+    "magazineNameOpacity": 0.6,
+    "padding": 40
+  },
+  "contentCard": {
+    "textFontSize": 42,
+    "numberFontSize": 200,
+    "numberOpacity": 0.15,
+    "padding": 60
+  },
+  "endCard": {
+    "mainTextFontSize": 48,
+    "subtextFontSize": 28,
+    "magazineNameFontSize": 20
+  }
+}

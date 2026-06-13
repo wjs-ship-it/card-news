@@ -1,9 +1,7 @@
 import { createCanvas } from 'canvas';
 import * as fs from 'fs';
 import * as path from 'path';
-
-const CARD_WIDTH = 1080;
-const CARD_HEIGHT = 1350;
+import { loadTemplate, TemplateConfig, getDefaultTemplate } from './template-engine.js';
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -45,48 +43,50 @@ export async function generateCards(
   lines: string[],
   magazineName: string,
   color: string,
-  outputDir: string
+  outputDir: string,
+  templateName?: string
 ): Promise<void> {
   fs.mkdirSync(outputDir, { recursive: true });
 
-  const rgb = hexToRgb(color);
-  const bgColor = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+  const template = templateName ? loadTemplate(templateName) : getDefaultTemplate();
 
-  await generateCoverCard(lines[0], magazineName, bgColor, outputDir);
+  await generateCoverCard(lines[0], magazineName, template, outputDir);
 
   for (let i = 1; i < 4; i++) {
-    await generateContentCard(lines[i], i, bgColor, outputDir);
+    await generateContentCard(lines[i], i, template, outputDir);
   }
 
-  await generateEndCard(lines[4], magazineName, bgColor, outputDir);
+  await generateEndCard(lines[4], magazineName, template, outputDir);
 }
 
 async function generateCoverCard(
   title: string,
   magazineName: string,
-  bgColor: string,
+  template: TemplateConfig,
   outputDir: string
 ): Promise<void> {
-  const canvas = createCanvas(CARD_WIDTH, CARD_HEIGHT);
+  const canvas = createCanvas(template.cardWidth, template.cardHeight);
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = bgColor;
-  ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+  ctx.fillStyle = template.backgroundColor;
+  ctx.fillRect(0, 0, template.cardWidth, template.cardHeight);
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-  ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "Segoe UI"';
+  const cfg = template.coverCard;
+
+  ctx.fillStyle = `rgba(0, 0, 0, ${cfg.magazineNameOpacity})`;
+  ctx.font = `bold ${cfg.magazineNameFontSize}px ${template.fontFamily}`;
   ctx.textAlign = 'center';
-  ctx.fillText(magazineName, CARD_WIDTH / 2, 150);
+  ctx.fillText(magazineName, template.cardWidth / 2, 100);
 
-  ctx.fillStyle = 'white';
-  ctx.font = 'bold 64px -apple-system, BlinkMacSystemFont, "Segoe UI"';
+  ctx.fillStyle = template.textColor;
+  ctx.font = `bold ${cfg.titleFontSize}px ${template.fontFamily}`;
   ctx.textAlign = 'center';
 
-  const titleLines = wrapText(ctx, title, CARD_WIDTH - 100);
-  const startY = CARD_HEIGHT / 2 - (titleLines.length * 80) / 2;
+  const titleLines = wrapText(ctx, title, template.cardWidth - cfg.padding);
+  const startY = template.cardHeight / 2 - (titleLines.length * 80) / 2;
 
   titleLines.forEach((line, index) => {
-    ctx.fillText(line, CARD_WIDTH / 2, startY + index * 80);
+    ctx.fillText(line, template.cardWidth / 2, startY + index * 80);
   });
 
   const buffer = canvas.toBuffer('image/png');
@@ -96,29 +96,31 @@ async function generateCoverCard(
 async function generateContentCard(
   content: string,
   index: number,
-  bgColor: string,
+  template: TemplateConfig,
   outputDir: string
 ): Promise<void> {
-  const canvas = createCanvas(CARD_WIDTH, CARD_HEIGHT);
+  const canvas = createCanvas(template.cardWidth, template.cardHeight);
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = bgColor;
-  ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+  ctx.fillStyle = template.backgroundColor;
+  ctx.fillRect(0, 0, template.cardWidth, template.cardHeight);
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-  ctx.font = 'bold 300px -apple-system, BlinkMacSystemFont, "Segoe UI"';
+  const cfg = template.contentCard;
+
+  ctx.fillStyle = `rgba(0, 0, 0, ${cfg.numberOpacity})`;
+  ctx.font = `bold ${cfg.numberFontSize}px ${template.fontFamily}`;
   ctx.textAlign = 'right';
-  ctx.fillText(index.toString(), CARD_WIDTH - 50, CARD_HEIGHT - 100);
+  ctx.fillText(index.toString(), template.cardWidth - 50, template.cardHeight - 100);
 
-  ctx.fillStyle = 'white';
-  ctx.font = '52px -apple-system, BlinkMacSystemFont, "Segoe UI"';
+  ctx.fillStyle = template.textColor;
+  ctx.font = `${cfg.textFontSize}px ${template.fontFamily}`;
   ctx.textAlign = 'center';
 
-  const lines = wrapText(ctx, content, CARD_WIDTH - 100);
-  const startY = CARD_HEIGHT / 2 - (lines.length * 70) / 2;
+  const lines = wrapText(ctx, content, template.cardWidth - cfg.padding);
+  const startY = template.cardHeight / 2 - (lines.length * 70) / 2;
 
   lines.forEach((line, i) => {
-    ctx.fillText(line, CARD_WIDTH / 2, startY + i * 70);
+    ctx.fillText(line, template.cardWidth / 2, startY + i * 70);
   });
 
   const buffer = canvas.toBuffer('image/png');
@@ -128,26 +130,28 @@ async function generateContentCard(
 async function generateEndCard(
   content: string,
   magazineName: string,
-  bgColor: string,
+  template: TemplateConfig,
   outputDir: string
 ): Promise<void> {
-  const canvas = createCanvas(CARD_WIDTH, CARD_HEIGHT);
+  const canvas = createCanvas(template.cardWidth, template.cardHeight);
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = bgColor;
-  ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+  ctx.fillStyle = template.backgroundColor;
+  ctx.fillRect(0, 0, template.cardWidth, template.cardHeight);
 
-  ctx.fillStyle = 'white';
-  ctx.font = 'bold 56px -apple-system, BlinkMacSystemFont, "Segoe UI"';
+  const cfg = template.endCard;
+
+  ctx.fillStyle = template.textColor;
+  ctx.font = `bold ${cfg.mainTextFontSize}px ${template.fontFamily}`;
   ctx.textAlign = 'center';
-  ctx.fillText('Thanks for reading!', CARD_WIDTH / 2, CARD_HEIGHT / 2 - 100);
+  ctx.fillText('Thanks for reading!', template.cardWidth / 2, template.cardHeight / 2 - 100);
 
-  ctx.font = '32px -apple-system, BlinkMacSystemFont, "Segoe UI"';
-  ctx.fillText(content, CARD_WIDTH / 2, CARD_HEIGHT / 2 + 100);
+  ctx.font = `${cfg.subtextFontSize}px ${template.fontFamily}`;
+  ctx.fillText(content, template.cardWidth / 2, template.cardHeight / 2 + 100);
 
-  ctx.font = 'bold 24px -apple-system, BlinkMacSystemFont, "Segoe UI"';
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-  ctx.fillText(magazineName, CARD_WIDTH / 2, CARD_HEIGHT - 100);
+  ctx.font = `bold ${cfg.magazineNameFontSize}px ${template.fontFamily}`;
+  ctx.fillStyle = template.accentColor;
+  ctx.fillText(magazineName, template.cardWidth / 2, template.cardHeight - 100);
 
   const buffer = canvas.toBuffer('image/png');
   fs.writeFileSync(path.join(outputDir, '05_end.png'), buffer);

@@ -1,0 +1,27 @@
+{
+  "name": "colorful",
+  "description": "Colorful and vibrant design",
+  "cardWidth": 1080,
+  "cardHeight": 1350,
+  "backgroundColor": "#FF6B6B",
+  "textColor": "#FFFFFF",
+  "accentColor": "#FFE66D",
+  "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI'",
+  "coverCard": {
+    "titleFontSize": 64,
+    "magazineNameFontSize": 32,
+    "magazineNameOpacity": 0.9,
+    "padding": 40
+  },
+  "contentCard": {
+    "textFontSize": 52,
+    "numberFontSize": 250,
+    "numberOpacity": 0.1,
+    "padding": 60
+  },
+  "endCard": {
+    "mainTextFontSize": 56,
+    "subtextFontSize": 36,
+    "magazineNameFontSize": 28
+  }
+}

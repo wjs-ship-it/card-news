@@ -30,7 +30,8 @@ program
   .description('Generate card news from article URL')
   .option('-o, --output <dir>', 'output directory', './card-news-output')
   .option('--zip', 'create ZIP archive of all cards')
-  .action(async (url: string, options: { output: string; zip?: boolean }) => {
+  .option('-t, --template <name>', 'card template (minimal, detailed, colorful)', 'minimal')
+  .action(async (url: string, options: { output: string; zip?: boolean; template?: string }) => {
     const { generateNews } = await import('./commands/generate.js');
     await generateNews(url, options);
   });
@@ -49,6 +50,14 @@ program
   .action(async () => {
     const { testAPI } = await import('./commands/test.js');
     await testAPI();
+  });
+
+program
+  .command('templates')
+  .description('List all available card templates')
+  .action(async () => {
+    const { listTemplates } = await import('./commands/list.js');
+    await listTemplates();
   });
 
 program.parse(process.argv);
