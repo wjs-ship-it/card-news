@@ -10,7 +10,10 @@
   "scripts": {
     "start": "node dist/cli.js",
     "build": "tsc",
-    "dev": "ts-node src/cli.ts"
+    "dev": "ts-node src/cli.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [
     "cli",
@@ -33,7 +36,10 @@
   "devDependencies": {
     "@types/archiver": "^8.0.0",
     "@types/inquirer": "^9.0.10",
+    "@types/jest": "^30.0.0",
     "@types/node": "^25.9.3",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
   }
