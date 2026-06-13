@@ -295,3 +295,42 @@ We take security seriously:
 - ✅ Safe file handling with proper cleanup
 
 See [SECURITY_CHECKLIST.md](./SECURITY_CHECKLIST.md) for details.
+
+## 🎨 Templates
+
+Choose from multiple pre-built templates:
+
+```bash
+# List all available templates
+card-news templates
+
+# Generate with specific template
+card-news generate https://example.com -t detailed
+```
+
+### Available Templates
+
+- **minimal** - Clean white design with black text (default)
+- **detailed** - Light gray with more text space, elegant
+- **colorful** - Vibrant red background with white text
+
+Each template includes optimized:
+- Colors and contrast
+- Font sizes and spacing
+- Card layout and proportions
+
+### Create Custom Templates
+
+Templates are JSON files in `templates/` directory. Copy an existing template and modify:
+
+```json
+{
+  "name": "my-template",
+  "description": "My custom design",
+  "backgroundColor": "#FFFFFF",
+  "textColor": "#000000",
+  "accentColor": "#FF6B6B",
+  ...
+}
+```
+
