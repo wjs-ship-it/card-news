@@ -261,3 +261,37 @@ Unlike web-based alternatives that charge per generation or token:
 **Made with ❤️ for content creators and developers**
 
 [⭐ Star us on GitHub!](https://github.com/wjs-ship-it/card-news)
+
+## 🆕 Phase 2 Features (In Progress)
+
+### ZIP Export
+Export all generated cards as a ZIP archive with metadata:
+
+```bash
+card-news generate https://example.com --zip
+# → card-news-output.zip
+```
+
+The ZIP file includes:
+- All 5 PNG cards
+- metadata.json with generation info
+
+### Upcoming Features
+- Multiple card templates (minimal, detailed, colorful)
+- Batch processing (multiple articles)
+- Advanced customization (fonts, gradients, logos)
+- Preview mode
+
+---
+
+## 🔐 Security
+
+We take security seriously:
+- ✅ No hardcoded secrets or API keys
+- ✅ Input validation for URLs and file paths
+- ✅ Protection against directory traversal attacks
+- ✅ Sensitive info never exposed in error messages
+- ✅ User API keys stored locally only (not our servers)
+- ✅ Safe file handling with proper cleanup
+
+See [SECURITY_CHECKLIST.md](./SECURITY_CHECKLIST.md) for details.
