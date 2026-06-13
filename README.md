@@ -334,3 +334,66 @@ Templates are JSON files in `templates/` directory. Copy an existing template an
 }
 ```
 
+
+## 🧪 Testing
+
+### Unit Tests
+
+Run automated tests with Jest:
+
+```bash
+# Run all tests
+npm test
+
+# Watch mode (re-run on changes)
+npm run test:watch
+
+# Coverage report
+npm run test:coverage
+```
+
+Tests include:
+- URL validation
+- Path security (traversal prevention)
+- Template loading and configuration
+- Filename sanitization
+
+### Manual Testing
+
+Test the CLI directly:
+
+```bash
+# Set up API key
+export CLAUDE_API_KEY="sk-ant-..."
+
+# Initialize
+card-news init
+
+# Test API connection
+card-news test
+
+# Generate cards
+card-news generate https://www.bbc.com/news
+card-news generate https://techcrunch.com/
+
+# Test templates
+card-news generate https://example.com -t colorful
+card-news generate https://example.com -t detailed
+
+# Test ZIP export
+card-news generate https://example.com --zip
+
+# List templates
+card-news templates
+```
+
+### Testing Checklist
+
+- [x] Unit tests with Jest
+- [x] URL validation
+- [x] Path security
+- [x] Template system
+- [ ] Integration tests (requires API key)
+- [ ] E2E tests
+- [ ] Performance tests
+
