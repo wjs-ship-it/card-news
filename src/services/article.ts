@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import { validateUrl } from '../utils/path-validator.js';
 
 interface Article {
   title: string;
@@ -7,8 +8,16 @@ interface Article {
 }
 
 export async function extractArticle(url: string): Promise<Article> {
+  // Validate URL format
+  if (!validateUrl(url)) {
+    throw new Error('Invalid URL format. Please provide a valid HTTP/HTTPS URL.');
+  }
+
   try {
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, {
+      timeout: 10000,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; card-news/1.0)' }
+    });
     const $ = cheerio.load(data);
 
     // NOTE: This is a generic way to get the title and body.

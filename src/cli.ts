@@ -29,7 +29,8 @@ program
   .command('generate <url>')
   .description('Generate card news from article URL')
   .option('-o, --output <dir>', 'output directory', './card-news-output')
-  .action(async (url: string, options: { output: string }) => {
+  .option('--zip', 'create ZIP archive of all cards')
+  .action(async (url: string, options: { output: string; zip?: boolean }) => {
     const { generateNews } = await import('./commands/generate.js');
     await generateNews(url, options);
   });
